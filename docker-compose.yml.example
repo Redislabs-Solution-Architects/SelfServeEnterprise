@@ -1,0 +1,11 @@
+version: '3'
+services:
+  app:
+    image: "maguec/self-serve-enterprise"
+    ports:
+      - "5000:5000"
+    environment:
+        - REDIS_SERVER=prod1.example.com
+        - REDIS_USER=me@example.com
+        - REDIS_PASSWORD=secretStuff
+

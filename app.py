@@ -120,4 +120,5 @@ def whackdb():
 if __name__ == '__main__':
    bootstrap.init_app(app)
    nav.init_app(app)
-   app.run()
+   app.run(port=5000, host="0.0.0.0")
+
