@@ -24,12 +24,17 @@
 {% block content %}
 
 <div class="container">
-<table class="table table-dark">
-  <tr><th>ID</th></th><th>DB Name</th><th>Port</th><th>Shards</th><th>Size(gb)</th></tr>
-  {% for row in results %}
-  <tr><td>{{ row['dbid'] }}</td><td>{{ row['name'] }}</td><td>{{ row['port'] }}</td><td>{{ row['shards'] }}</td><td>{{ row['size'] }}</td></tr>
-  {% endfor %}
-    </table>
+<form action = "/whackdb" method = "POST">
+  <div class="form-group">
+    <label for="dbid">Database to delete</label>
+    <input id="dbid" class="form-control" name="dbid">
+  </div>
+  <div class="form-group">
+    <br><br>
+    <p><input type = "submit" value = "submit" /></p>
+  </div>
+</form>
+
 </div>
 
 {% endblock %}

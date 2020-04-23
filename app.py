@@ -24,6 +24,12 @@ redis_server = environ.get('REDIS_SERVER')
 redis_user = environ.get('REDIS_USER')
 redis_password = environ.get('REDIS_PASSWORD')
 
+def delete_database(server, user, password, id):
+   headers = { 'Content-Type' : 'application/json'}
+   u = 'https://' + server + ":9443/v1/bdbs/" + id
+   r = requests.delete(u, headers=headers, verify=False, auth=(user, password))
+   return(r.status_code)
+
 def list_databases(server, user, password):
    dbs = []
    headers = { 'Content-Type' : 'application/json'}
@@ -36,6 +42,7 @@ def list_databases(server, user, password):
          'port': db['port'],
          'size': db['memory_size']/(1024*1024*1024),
          'shards': db['shards_count'],
+         'dbid': db['uid'],
          })
 
    return(dbs)
@@ -56,7 +63,13 @@ def createdb():
 
 @app.route('/delete')
 def deletedb():
-   return render_template('index.html')
+   return render_template('delete.html')
+
+@app.route('/whackdb', methods = ['POST'])
+def whackdb():
+   a = request.form.to_dict()
+   resp = delete_database(redis_server, redis_user, redis_password, a['dbid'])
+   return render_template('dbdeleted.html', db=a['dbid'], status = resp)
 
 if __name__ == '__main__':
    bootstrap.init_app(app)
