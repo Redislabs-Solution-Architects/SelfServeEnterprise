@@ -4,4 +4,4 @@ Flask-Bootstrap==3.3.7.1
 Flask-Debug==0.4.3
 flask-nav==0.6
 Flask-WTF==0.14.3
-requests==2.18.4
+requests==2.20.0
