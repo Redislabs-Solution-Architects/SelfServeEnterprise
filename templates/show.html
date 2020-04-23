@@ -23,20 +23,14 @@
 
 {% block content %}
 
-<p>This is an example of how to build a self-serve portal for Redis Enterprise for your organization</p>
-
-<p>To run please ensure the following environment variables are set</p>
-<ul>
-  <li>REDIS_SERVER</li>
-  <li>REDIS_USER</li>
-  <li>REDIS_PASSWORD</li>
-</ul>
-
-<br>
-<p>For Example:</p>
-<p>export REDIS_SERVER=mycluster.example.com</p>
-<p>export REDIS_USER=redisadmin@example.com</p>
-<p>export REDIS_PASSWORD=myPassword1234</p>
+<div class="container">
+<table class="table table-dark">
+  <tr><th>DB Name</th><th>Port</th><th>Shards</th><th>Size(gb)</th></tr>
+  {% for row in results %}
+  <tr><td>{{ row['name'] }}</td><td>{{ row['port'] }}</td><td>{{ row['shards'] }}</td><td>{{ row['size'] }}</td></tr>
+  {% endfor %}
+    </table>
+</div>
 
 {% endblock %}
  

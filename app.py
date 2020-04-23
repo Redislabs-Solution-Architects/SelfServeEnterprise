@@ -5,6 +5,7 @@ from flask_nav.elements import Navbar, View
 from os import environ
 
 import json
+import requests
 
 app = Flask(__name__)
 bootstrap = Bootstrap()
@@ -20,8 +21,25 @@ topbar = Navbar('',
 nav.register_element('top', topbar)
 
 redis_server = environ.get('REDIS_SERVER')
-redis_server = environ.get('REDIS_USER')
-redis_server = environ.get('REDIS_PASSWORD')
+redis_user = environ.get('REDIS_USER')
+redis_password = environ.get('REDIS_PASSWORD')
+
+def list_databases(server, user, password):
+   dbs = []
+   headers = { 'Content-Type' : 'application/json'}
+   u = 'https://' + server + ":9443/v1/bdbs"
+   r = requests.get(u, headers=headers, verify=False, auth=(user, password))
+   j = json.loads(r.text)
+   for db in j:
+      dbs.append({
+         'name': db['name'],
+         'port': db['port'],
+         'size': db['memory_size']/(1024*1024*1024),
+         'shards': db['shards_count'],
+         })
+
+   return(dbs)
+
 
 @app.route('/')
 def index():
@@ -29,7 +47,8 @@ def index():
 
 @app.route('/show')
 def showdbs():
-   return render_template('index.html')
+   data = list_databases(redis_server, redis_user, redis_password)
+   return render_template('show.html', results = data)
 
 @app.route('/create')
 def createdb():
