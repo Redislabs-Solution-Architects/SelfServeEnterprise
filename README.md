@@ -1,5 +1,10 @@
 # Self Serve Enterprise Portal Example
 
+This is an example of how to create a self serve portal for users within your organization on Redis Enterprise.
+
+Users can create, delete and view Redis databases on an Enterprise cluster.
+
+
 ## Running with Docker
 
 ### Prerequisites 
