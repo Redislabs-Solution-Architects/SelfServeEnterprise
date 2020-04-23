@@ -25,7 +25,35 @@
 
 <div class="container">
 
-	{{ status }}
+  {% if status == 200 %}
+<p> Your database has been sucessfully created you can connect to it by running <p></p>
+
+With the CLI
+ <pre><code>
+  redis-cli -h redis-{{ port }}.{{ server }} -p {{ port }} -a {{ passwd }}
+  </code></pre>
+
+In Python
+ <pre><code>
+  import redis
+
+  try:
+      conn = redis.StrictRedis(
+          host='redis-{{ port }}.{{ server }}',
+          port={{ port }},
+          password='{{ passwd }}')
+      print conn
+      conn.ping()
+      print 'Connected!'
+  except Exception as ex:
+      print 'Error:', ex
+      exit('Failed to connect, terminating.')
+ </code></pre>
+
+  <p>Please note down the password as it will not be displayed again</p>
+  {% else %}
+  <p>We were not able to create the database with error : {{ status }}</p>
+  {% endif %}
 
 </div>
 

@@ -53,8 +53,7 @@ def create_database(server, user, password, params, port, passwd):
            "shards_count": int(params['dbshards']),
            "authentication_redis_pass": passwd }
         )
-   j = json.loads(r.text)
-   return(j)
+   return(r.status_code)
 
 def delete_database(server, user, password, id):
    headers = { 'Content-Type' : 'application/json'}
@@ -100,6 +99,7 @@ def deletedb():
 @app.route('/dbcreate', methods = ['POST'])
 def dbcreate():
    used_ports=list(map(lambda x: x['port'] , list_databases(redis_server, redis_user, redis_password)))
+   rpass = randomString(16)
    for i in range(10001, 19999):
       if i in used_ports:
          continue
@@ -107,8 +107,8 @@ def dbcreate():
          rport=i
       break
    a = request.form.to_dict()
-   resp = create_database(redis_server, redis_user, redis_password, a, rport, randomString(16))
-   return render_template('dbcreated.html', db=a['dbname'], status = resp)
+   resp = create_database(redis_server, redis_user, redis_password, a, rport, rpass)
+   return render_template('dbcreated.html', db=a['dbname'], port=rport, passwd=rpass, status = resp, server=redis_server)
 
 
 @app.route('/whackdb', methods = ['POST'])
